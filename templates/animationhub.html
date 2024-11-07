@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hubstyle.css') }}">
+</head>
+
+<body>
+    <a id="back" href="{{ url_for('hub') }}">Back</a>
+    <h1>Animation List</h1>
+    <div class="container">
+        <div id='nav'>
+            <a href="{{ url_for('a_bounce') }}" class="button">Bounce Animation</a>
+            <a href="{{ url_for('a_circle') }}" class="button">Circle Animation</a>
+            <a href="{{ url_for('a_triangle') }}" class="button">Triangle Animation</a>
+            <a href="{{ url_for('a_water') }}" class="button">Water Animation</a>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

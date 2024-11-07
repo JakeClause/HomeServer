@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hubstyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <style>
+        #invisible_button {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 50px; /* Adjust width as needed */
+            height: 50px; /* Adjust height as needed */
+            opacity: 0; /* Makes the button invisible */
+            z-index: 1000; /* Ensure it is above other elements */
+        }
+
+        #video_viewer_button {
+            display: none; /* Initially hide the Video Viewer button */
+        }
+    </style>
+</head>
+<body>
+    <div class="container-wrapper">
+        <h1 id="title">Home Server</h1>
+        <button id="invisible_button"></button>
+
+        <div class="parent">
+            {% if 'logged_in' in session and session['logged_in'] %}
+            <div id="diskContainer" class="child"></div>
+            <div id="container" style="flex: 1; text-align: center; padding-right: 320px;">
+                {% if 'logged_in' in session and session['logged_in'] %}
+                <a href="{{ url_for('logout') }}" class="loggout_button" >Logout</a>
+                {% else %}
+                <a href="{{ url_for('main_page') }}" class="login_button" style="flex: 1; text-align: center; padding-right: 220px;">Login</a>
+                {% endif %}
+                <div id='nav'>
+                    <!-- Admin links -->
+                    {% if 'logged_in' in session and session['logged_in'] %}
+                    <a href="https://my.arlo.com/#/home" target="_blank" class="button">Arlo</a>
+                    <a href="{{ url_for('dispo') }}" class="button">Dispensaries</a>
+                    <a href="{{ url_for('file_browser') }}" class="button">File Browser</a>
+                    <a href="{{ url_for('upload_file') }}" class="button">File Transfer</a>
+                    <a href="{{ url_for('render_pdf') }}" class="button">PDFtoJPG</a>
+                    <a href="https://app.plex.tv/desktop/#!/settings/server/e43cca183ce122cb5ee4caf45e9fb316631102ac/status/server-dashboard" target="_blank" class="button">Plex Dashboard</a>
+                    <a href="{{ url_for('logs.display_logs') }}" class="button">Server Logs</a>
+                    <a href="{{ url_for('video_hub') }}" class="button" id="video_viewer_button">Video Viewer</a>
+                    <a href="{{ url_for('request_movie') }}" class="button">View Movie Requests</a>
+                    <a href="{{ url_for('youtube2mp3') }}" class="button">YouTube2MP3</a>
+                    <button id="infoBtn">Info</button>
+                    <button id="settingsBtn">Settings</button>
+                {% else %}
+                    <!-- User links (only shows for users)-->
+                    <a href="{{ url_for('animations') }}" target="_blank" class="button">Animations</a>
+                    <a href="{{ url_for('request_movie') }}" class="button">Request a Movie</a>
+                    <a href="https://www.accuweather.com/en/us/bath/18014/weather-forecast/335376" target="_blank" class="button">Weather</a>
+                    {% endif %}
+                </div>
+                <button id="cycleBackgroundBtn">Cycle Backgrounds</button>
+            </div>
+            {% else %}
+            <div id="container" style="flex: 1; text-align: center;">
+                {% if 'logged_in' in session and session['logged_in'] %}
+                <a href="{{ url_for('logout') }}" class="loggout_button" >Logout</a>
+                {% else %}
+                <a href="{{ url_for('main_page') }}" class="login_button">Login</a>
+                {% endif %}
+                <div id='nav'>
+                    <!-- Admin links -->
+                    {% if 'logged_in' in session and session['logged_in'] %}
+                    <a href="https://my.arlo.com/#/home" target="_blank" class="button">Arlo</a>
+                    <a href="{{ url_for('dispo') }}" class="button">Dispensaries</a>
+                    <a href="{{ url_for('file_browser') }}" class="button">File Browser</a>
+                    <a href="{{ url_for('upload_file') }}" class="button">File Transfer</a>
+                    <a href="{{ url_for('render_pdf') }}" class="button">PDFtoJPG</a>
+                    <a href="https://app.plex.tv/desktop/#!/settings/server/e43cca183ce122cb5ee4caf45e9fb316631102ac/status/server-dashboard" target="_blank" class="button">Plex Dashboard</a>
+                    <a href="{{ url_for('logs.display_logs') }}" class="button">Server Logs</a>
+                    <a href="{{ url_for('video_hub') }}" class="button" id="video_viewer_button">Video Viewer</a>
+                    <a href="{{ url_for('request_movie') }}" class="button">View Movie Requests</a>
+                    <button id="infoBtn">Info</button>
+                    <button id="settingsBtn">Settings</button>
+                {% else %}
+                    <!-- User links (only shows for users)-->
+                    <a href="{{ url_for('animations') }}" target="_blank" class="button">Animations</a>
+                    <a href="{{ url_for('request_movie') }}" class="button">Request a Movie</a>
+                    <a href="https://www.accuweather.com/en/us/bath/18014/weather-forecast/335376" target="_blank" class="button">Weather</a>
+                    {% endif %}
+                </div>
+                <button id="cycleBackgroundBtn">Cycle Backgrounds</button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('infoBtn').addEventListener('click', function() {
+            window.location.href = "{{ url_for('about_pc') }}";
+        });
+        
+        document.getElementById('settingsBtn').addEventListener('click', function() {
+            window.location.href = "{{ url_for('settings') }}";
+        });
+
+        document.getElementById('invisible_button').addEventListener('click', function() {
+            var videoViewerButton = document.getElementById('video_viewer_button');
+            if (videoViewerButton.style.display === 'none' || videoViewerButton.style.display === '') {
+                videoViewerButton.style.display = 'block';
+            } else {
+                videoViewerButton.style.display = 'none';
+            }
+            videoViewerButton.offsetHeight; // Trigger reflow to ensure the page updates
+        });
+    </script>
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+    <script src="{{ url_for('static', filename='storage.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+
+#trianglecanvas {
+    margin-top: 1%;
+    margin-left: 20%;
+    border: 1px solid #000000;
+    width: 60%;
+    height: 20%;
+    background-color: #ffffff;
+}
+
+#circlecanvas {
+    margin-top: 1%;
+    margin-left: 20%;
+    border: 1px solid #000000;
+    background-color: #ffffff;
+    width: 60%;
+    height: 100%;
+}
+
+#waterCanvas {
+    margin-top: 1%;
+    margin-left: 20%;
+    border: 1px solid #000000;
+    background-color: #ffffff;
+    width: 60%;
+    height: 100%;
+}
+
+#bounceCanvas {
+    margin-top: 1%;
+    margin-left: 20%;
+    border: 1px solid #000000;
+    background-color: #ffffff;
+    width: 1200px;
+    height: 800px;
+}
+
+/* Styles and moves the button to the right of the canvas */
+#back {
+    position: absolute;
+    top: 5%;
+    right: 90%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    font-size: 16px;
+    padding: 12px 24px;
+    border: 1px solid #000000;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Styles and moves the button to the right of the canvas */
+#resetb {
+    position: absolute;
+    top: 10%;
+    right: 90%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    font-size: 14px;
+    padding: 12px 24px;
+    border: 1px solid #000000;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#styles {
+    position: absolute;
+    top: 5%;
+    left: 90%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+}
+
+
+body{
+    background-color: #d0ffe7;
+    background-repeat: no-repeat;
+}

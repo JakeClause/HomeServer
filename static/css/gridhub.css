@@ -1,0 +1,89 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    margin-top: 0px;
+    padding-top: 50px;
+    text-align: center;
+    color: #333;
+}
+
+.video-grid {
+    margin-top: 50px;
+    display: grid;
+    gap: 20px; /* Gap between items */
+}
+
+.video-item {
+    height: 150px;
+    background-color: #ccc; /* Placeholder background color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center; /* Center text content */
+    color: #333; /* Text color */
+    font-size: 14px; /* Font size for video filenames */
+    padding: 10px; /* Padding around video items */
+}
+
+.video-item:hover {
+    background-color: #aaa; /* Hover background color */
+}
+
+@media (min-width: 768px) {
+    .video-grid {
+        grid-template-columns: repeat(5, 1fr); /* 2 columns for smaller screens */
+    }
+}
+
+@media (max-width: 767px) {
+    .video-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .video-grid {
+        grid-template-columns: repeat(1, 1fr); /* 1 column for mobile screens */
+    }
+}
+
+
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    margin: 20px 0;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.video-title {
+    margin-top: 10px;
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.video-thumbnail {
+    width: 110%;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 5px;
+}

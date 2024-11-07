@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plex Server Controls</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hubstyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <a id="back" href="{{ url_for('hub') }}">Back</a>
+    <h1><a href="http://192.168.6.209:8000/#!/guide" target="_blank">DizqueTV</a> Server Controls</h1> <!-- Change ip (logging purposes) -->
+    <form id="launchForm">
+        <button type="button" id="launchBtn">Launch Dizquetv</button>
+    </form>
+    <h2 id="serverStatus">Down</h2> <!-- Status text -->
+    <form id="closeForm">
+        <button type="button" id="closeBtn">Close Dizquetv</button>
+    </form>
+
+    <!-- Notification container -->
+    <div id="notification"></div>
+
+    <script>
+        $(document).ready(function() {
+        // Function to disable button after click
+        function disableButton(btnId) {
+            var btn = $('#' + btnId);
+            btn.prop('disabled', true);  // Disable the button
+            btn.data('originalText', btn.text()); // Store original text
+            btn.text('Processing...');  // Change button text
+        }
+
+        // Function to enable button and restore original text
+        function enableButton(btnId) {
+            var btn = $('#' + btnId);
+            btn.prop('disabled', false); // Enable the button
+            btn.text(btn.data('originalText')); // Restore original text
+        }
+
+        // Function to show notification
+        function showNotification(message, type) {
+            var notification = $('#notification');
+            notification.text(message);
+            notification.css('display', 'block');
+            
+            // Set background color based on type
+            if (type === 'success') {
+                notification.css('background-color', '#4CAF50'); // Green for success
+                notification.css('color', 'white');
+            } else if (type === 'error' || type === 'closing') {
+                notification.css('background-color', '#f44336'); // Red for error or closing notification
+                notification.css('color', 'white');
+            }
+
+            setTimeout(function() {
+                notification.css('display', 'none');
+            }, 3000); // Hide after 3 seconds
+        }
+
+        // Function to handle form submission
+        function submitForm(url, btnId, oppositeBtnId) {
+            var serverStatus = localStorage.getItem('serverStatus'); // Retrieve server status from localStorage
+            if (serverStatus === 'Down' && url === '/close') {
+                // If server is already down and close button is clicked, show processing message
+                disableButton(btnId);
+                return;
+            }
+            
+            disableButton(btnId); // Disable the clicked button
+            $.ajax({
+                type: 'POST',
+                url: url,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        if (url === '/close') {
+                            showNotification(response.message, 'closing'); // Use 'closing' type for closing notification
+                        } else {
+                            showNotification(response.message, 'success');
+                        }
+                        $('#' + oppositeBtnId).prop('disabled', false); // Enable the other button
+                        $('#' + oppositeBtnId).text($('#' + oppositeBtnId).data('originalText')); // Restore original text of opposite button
+                        
+                        // Update server status text based on button clicked
+                        if (url === '/launch') {
+                            localStorage.setItem('serverStatus', 'Up'); // Store server status
+                        } else if (url === '/close') {
+                            localStorage.setItem('serverStatus', 'Down'); // Store server status
+                        }
+                        updateServerStatus(); // Update server status text
+                        
+                        // Disable launch server button if server status is 'Up'
+                        if (localStorage.getItem('serverStatus') === 'Up') {
+                            $('#launchBtn').prop('disabled', true);
+                            $('#launchBtn').text('Server Running...'); // Set launch button text to 'Processing...' if server is already up
+                        } else {
+                            $('#launchBtn').prop('disabled', false);
+                            $('#launchBtn').text('Launch Dizquetv'); // Restore original text if server is not up
+                        }
+
+                        // Disable close server button if server status is 'Down'
+                        if (localStorage.getItem('serverStatus') === 'Down') {
+                            $('#closeBtn').prop('disabled', true);
+                            $('#closeBtn').text('Not Running...'); // Set close button text to 'Processing...' if server is already down
+                        } else {
+                            $('#closeBtn').prop('disabled', false);
+                            $('#closeBtn').text('Close Dizquetv'); // Restore original text if server is not down
+                        }
+                    } else {
+                        showNotification(response.message, 'error');
+                        enableButton(btnId); // Enable the clicked button again on error
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showNotification('Error: ' + xhr.responseText, 'error');
+                    enableButton(btnId); // Enable the clicked button again on error
+                }
+            });
+        }
+
+        // Function to update server status text
+        function updateServerStatus() {
+            var serverStatus = localStorage.getItem('serverStatus'); // Retrieve server status from localStorage
+            if (serverStatus) {
+                $('#serverStatus').text('Server Status: ' + serverStatus);
+                // Set color based on server status
+                if (serverStatus === 'Up') {
+                    $('#serverStatus').css('color', 'green'); // Set color to green for 'Up'
+                } else if (serverStatus === 'Down') {
+                    $('#serverStatus').css('color', 'red'); // Set color to red for 'Down'
+                }
+            }
+        }
+
+
+        // Add event listener for launch button
+        $('#launchBtn').click(function() {
+            // Submit form with launch button clicked and close button as the opposite button
+            submitForm('/launch', 'launchBtn', 'closeBtn');
+            // Update text of close button
+            $('#closeBtn').text('Close dizquetv-win-x64.exe');
+        });
+
+        // Add event listener for close button
+        $('#closeBtn').click(function() {
+            // Submit form with close button clicked and launch button as the opposite button
+            submitForm('/close', 'closeBtn', 'launchBtn');
+            // Update text of launch button
+            $('#launchBtn').text('Launch Dizquetv');
+        });
+
+        // Initial update of server status when the page loads
+        updateServerStatus();
+
+        // Disable launch server button if server status is 'Up' when the page loads
+        if (localStorage.getItem('serverStatus') === 'Up') {
+            $('#launchBtn').prop('disabled', true);
+            $('#launchBtn').text('Server Running...'); // Set launch button text to 'Processing...' if server is already up
+        }
+
+        // Disable close server button if server status is 'Down' when the page loads
+        if (localStorage.getItem('serverStatus') === 'Down') {
+            $('#closeBtn').prop('disabled', true);
+            $('#closeBtn').text('Not Running...'); // Set close button text to 'Processing...' if server is already down
+        }
+    });
+
+    </script>
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Transfer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hubstyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .emoji-wrapper {
+            width: 400px;
+            height: 80px;
+            margin-bottom: 20px;
+            position: relative;
+            border-radius: 25px;
+            background: #fff;
+        }
+
+        .emoji {
+            font-size: 48px;
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: left 2s ease, transform 2s ease;
+        }
+
+        .cabinet {
+            font-size: 48px;
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .checkmark {
+            display: none;
+            font-size: 24px;
+            color: #4a90e2;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a id="back" href="{{ url_for('hub') }}">Back</a>
+    <h1>File Transfer</h1>
+    <form id="uploadForm" action="/upload_file" method="post" enctype="multipart/form-data">
+        <label for="file">Select File:</label>
+        <input type="file" name="file" id="file" accept=".txt, .pdf, .jpg, .png, .mp4, .avi, .mkv, .mov, .flv, .wmv, .py, .html, .zip, .mp3, .flac, .wav, .zip, .7z" required>
+        
+        <label for="category">Select Category:</label>
+        <select name="category" id="category">
+            <option value="movies">Movies</option>
+            <option value="tv_shows">TV Shows</option>
+            <option value="music">Music</option>
+            <option value="pdfs">PDFs</option>
+            <option value="others">Others</option>
+        </select>
+        
+        <button type="submit">Upload File</button>
+    </form>
+
+    <div class="container">
+        <div class="emoji-wrapper">
+            <div class="emoji" id="emoji">📁</div>
+            <div class="cabinet" id="cabinet">🗄️</div>
+        </div>
+        <div class="checkmark" id="checkmark">Upload Complete &#10003;</div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const emoji = document.getElementById('emoji');
+            const checkmark = document.getElementById('checkmark');
+            const fileInput = document.getElementById('file');
+
+            // Get file input
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            // Estimate transfer duration based on file size (e.g., 1 MB per second)
+            const estimatedUploadSpeed = 1 * 1024 * 1024; // 1 MB/s in bytes
+            const fileSize = file.size; // File size in bytes
+            const estimatedDuration = Math.max(1000, (fileSize / estimatedUploadSpeed) * 5); // Minimum 1 second
+
+            // Update CSS transition duration based on estimated duration
+            emoji.style.transitionDuration = `${estimatedDuration}ms`;
+
+            // Animate the emoji
+            emoji.style.left = 'calc(100% - 100px)'; /* Adjusted distance */
+            emoji.style.transform = 'translateY(-40%) scale(0.2)';
+
+            // Create FormData object
+            const formData = new FormData(this);
+
+            // Send form data using Fetch API
+            fetch('/upload', { // Ensure this URL matches your server endpoint
+                method: 'POST',
+                body: formData, // Use FormData to include file data
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('File uploaded successfully');
+                } else {
+                    console.error('Error:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                // Reset file input value
+                fileInput.value = '';
+                // Show checkmark after animation
+                setTimeout(() => {
+                    checkmark.style.display = 'block';
+                }, estimatedDuration); // Show checkmark after animation completes
+                
+                // Reset emoji and checkmark after 3 seconds
+                setTimeout(() => {
+                    checkmark.style.display = 'none'; // Hide checkmark
+                    emoji.style.left = '30px'; // Reset emoji position
+                    emoji.style.transform = 'translateY(-50%) scale(1)'; // Reset emoji scale
+                    emoji.style.transitionDuration = '0s'; // Reset transition
+                }, estimatedDuration + 3000); // Adjust 3000ms to your preferred duration
+            });
+        });
+
+        // Event listener for category change
+        document.getElementById('category').addEventListener('change', function() {
+            var fileInput = document.getElementById('file');
+            if (this.value === 'tv_shows') {
+                fileInput.setAttribute('webkitdirectory', '');
+            } else {
+                fileInput.removeAttribute('webkitdirectory');
+            }
+        });
+    </script>
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

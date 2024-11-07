@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Logs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hubstyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    {% if 'logged_in' in session and session['logged_in'] %}
+    <a id="back" href="{{ url_for('hub') }}">Back</a>
+    <h1>Server Logs</h1>
+    <div id="logs">
+        <pre id="logContent"></pre>
+    </div>
+    <button id="clearLogs">Clear Logs</button> <!-- Add a button to clear logs -->
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+    {% else %}
+    <h1 style="color: red; font-weight: bolder;">Fuck off</h1>
+    {% endif %}
+    <script>
+        // Function to update logs
+        function updateLogs() {
+            $.ajax({
+                url: "/logs/get_logs",
+                type: "GET",
+                success: function(response) {
+                    // Join array of log lines into a single string
+                    var logsString = response.join("\n");
+                    // Append the new logs to the existing log content
+                    $('#logContent').append(logsString);
+                    // Scroll to the bottom of the log content
+                    $('#logs').scrollTop($('#logs')[0].scrollHeight);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching logs:", error);
+                }
+            });
+        }
+
+        // Function to clear logs
+        function clearLogs() {
+            $.ajax({
+                url: "/logs/clear_logs", // Endpoint to clear logs
+                type: "GET",
+                success: function(response) {
+                    // Update logs after clearing
+                    $('#logContent').text(''); // Clear log content
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error clearing logs:", error);
+                }
+            });
+        }
+
+        // Update logs every 15 seconds
+        setInterval(updateLogs, 15000);
+
+        // Initial update on page load
+        updateLogs();
+
+        // Bind click event to clearLogs function when the button is clicked
+        $('#clearLogs').on('click', clearLogs);
+    </script>
+</body>
+</html>

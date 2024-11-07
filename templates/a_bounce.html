@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow Field</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animationstyle.css') }}">
+</head>
+
+<body>
+    <canvas id="bounceCanvas" width="800" height="600"></canvas>
+    <div id="controls">
+        <a id="back" href="{{ url_for('animations') }}">Back</a>
+        <button  id='resetb' onclick="refreshPage()">Reset</button>
+    </div>
+    <script>
+        // JavaScript function to refresh the page
+        function refreshPage() {
+            location.reload();
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/bounce.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hubstyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <a id="back" href="{{ url_for('hub') }}">Back</a>
+    <h1>Movie Requests</h1>
+    {% if 'logged_in' in session and session['logged_in'] %}
+        <div id="Requests">
+            <pre id="RequestContent"></pre>
+        </div>
+        <button id="clearRequests">Clear Requests</button>
+    {% else %}
+    <form id="requestForm">
+        <input type="text" id="movieTitle" placeholder="Enter movie title">
+        <button type="submit">Submit Request</button>
+    </form>
+    {% endif %}
+
+    <script>
+        // Function to update requests
+        function updateRequests() {
+            $.ajax({
+                url: "/requests/get_requests",
+                type: "GET",
+                success: function(response) {
+                    // Split the response by commas to create an array of movie titles
+                    var movies = response;
+                    // Create an empty string to hold the formatted HTML
+                    var html = '';
+                    // Iterate over each movie title and format it with <p> tags
+                    movies.forEach(function(movie) {
+                        html += '<p>' + movie.trim() + '\n</p>'; // Trim to remove any extra whitespace
+                    });
+                    // Set the HTML content of #RequestContent
+                    $('#RequestContent').html(html);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching requests:", error);
+                }
+            });
+        }
+
+        // Function to clear requests
+        function clearRequests() {
+            $.ajax({
+                url: "/requests/clear_requests",
+                type: "GET",
+                success: function(response) {
+                    $('#RequestContent').text('');
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error clearing requests:", error);
+                }
+            });
+        }
+
+        // Handle form submission for adding a movie request
+        $('#requestForm').on('submit', function(event) {
+            event.preventDefault();
+            var movieTitle = $('#movieTitle').val();
+            $.ajax({
+                url: "/requests/add_request",
+                type: "POST",
+                data: { movie_title: movieTitle },
+                success: function(response) {
+                    updateRequests();
+                    $('#movieTitle').val('');
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error adding request:", error);
+                }
+            });
+        });
+
+        // Bind click event to clearRequests function when the button is clicked
+        $('#clearRequests').on('click', clearRequests);
+
+        // Initial update on page load
+        updateRequests();
+    </script>
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

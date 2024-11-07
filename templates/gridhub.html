@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Hub</title>
+    <link rel="stylesheet" href="/static/css/gridhub.css">
+    <style>
+        h1 {
+            color: white;
+            font-weight: bolder;
+        }
+
+        /* Ensure the background image remains fixed */
+        body {
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed; /* Ensures the background image stays fixed */
+        }
+
+        .container {
+            background-color: rgb(145, 145, 145);
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Video grid styling */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .video-item {
+            background-color: #333;
+            border-radius: 5px;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    <script src="/static/js/grid.js" defer></script>
+</head>
+<body>
+    <button onclick="window.location.href = '/';" class="back-button">Back</button>
+    <div class="container">
+        <h1>Video Collection</h1>
+        <input type="text" id="searchInput" placeholder="Search videos...">
+        <div id="videoGrid" class="video-grid">
+            <!-- Video thumbnails will be dynamically added here -->
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

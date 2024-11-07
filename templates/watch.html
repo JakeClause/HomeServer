@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Video</title>
+    <script src="/static/js/grid.js" defer></script>
+    <link rel="stylesheet" href="/static/css/watch.css">
+</head>
+<body>
+    <button onclick="window.location.href = '/video_hub';" class="back-button">Back</button>
+    <div id="wvt">{{ video_file[:-4] }}</div> <!-- Display video file name without .mp4 extension -->
+    <div id="video-container">
+        <video controls>
+            <source src="/videos/{{ video_file }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</body>
+</html>

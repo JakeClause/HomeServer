@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hubstyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+</head>
+<body>
+    <a id="back" href="{{ url_for('hub') }}">Back</a>
+    <h1>Settings</h1>
+    <form id="settingsUploadForm" action="/save_settings" method="post">
+        <label for="HOMEFILETRASFER">Main Folder:</label>
+        <input type="text" name="HOMEFILETRASFER" id="transfer_folder" required value="{{ folder['HOMEFILETRASFER'] }}">
+
+        <button type="submit">Save</button>
+        <button type="button" id="cancel">Cancel</button>
+    </form>
+    <script>
+        document.getElementById('cancel').addEventListener('click', function() {
+            window.location.href = "{{ url_for('hub') }}";
+        });
+    </script>
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

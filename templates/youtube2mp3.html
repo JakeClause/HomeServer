@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube2MP3</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hubstyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .emoji-wrapper {
+            width: 400px;
+            height: 80px;
+            margin-top: 20px;
+            position: relative;
+            border-radius: 25px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .emoji {
+            font-size: 48px;
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: left 13s ease, transform 13s ease;
+        }
+
+        .cabinet {
+            font-size: 48px;
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .checkmark {
+            display: none;
+            font-size: 24px;
+            color: #4a90e2;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a id="back" href="{{ url_for('hub') }}">Back</a>
+    <h1>YouTube2MP3</h1>
+    <form id="uploadForm" action="/youtube2mp3" method="post">
+        <label for="url">Enter Video URL:</label>
+        <input type="text" name="url" id="url" required>
+        <label for="name" style="font-size: smaller;">Enter Filename (Artist - Song):</label>
+        <input type="text" name="name" id="name" required>
+        <button type="submit">Convert</button>
+    </form>
+    
+    <div class="container">
+        <div class="emoji-wrapper">
+            <div class="emoji" id="emoji">🎞️</div> <!-- Change emoji as desired -->
+            <div class="cabinet" id="cabinet">🎵</div> <!-- Optional, if you want another emoji or icon -->
+        </div>
+        <div class="checkmark" id="checkmark">Conversion Complete &#10003;</div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function(event) {
+            event.preventDefault();
+            const url = document.getElementById('url').value;
+            const name = document.getElementById('name').value;
+
+            const formData = new FormData();
+            formData.append('url', url);
+            formData.append('name', name);
+
+            // Show the emoji animation
+            const emoji = document.getElementById('emoji');
+            const checkmark = document.getElementById('checkmark');
+            emoji.style.transitionDuration = '13s'; // Adjust the duration if needed
+            emoji.style.left = 'calc(100% - 100px)'; // Adjust the distance
+            emoji.style.transform = 'translateY(-50%) scale(0.2)'; // Animation effect
+
+            try {
+                const response = await fetch('/youtube2mp3', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                const messageDiv = document.getElementById('uploadMessage');
+
+                if (result.success) {
+                    messageDiv.innerHTML = `<p class="success">Conversion completed! Click <a href="${result.download_url}" download="${name}.mp3">here</a> to download the file.</p>`;
+                } else {
+                    messageDiv.innerHTML = `<p class="error">Conversion failed: ${result.message}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('uploadMessage').innerHTML = `<p class="error">An error occurred: ${error.message}</p>`;
+            } finally {
+                // Show checkmark after animation
+                setTimeout(() => {
+                    checkmark.style.display = 'block';
+                }, 13000); // Show checkmark after animation completes (same as emoji transition duration)
+                
+                // Reset emoji and checkmark after a delay
+                setTimeout(() => {
+                    checkmark.style.display = 'none'; // Hide checkmark
+                    emoji.style.left = '30px'; // Reset emoji position
+                    emoji.style.transform = 'translateY(-50%) scale(1)'; // Reset emoji scale
+                    emoji.style.transitionDuration = '0s'; // Reset transition
+                }, 18000); // Adjust the duration if needed
+            }
+        };
+    </script>
+    
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

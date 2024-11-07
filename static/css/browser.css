@@ -1,0 +1,151 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 20px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1 {
+    color: #0066cc;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 10px 0;
+}
+
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+form {
+    display: inline;
+}
+
+button {
+    margin-left: 10px;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #0066cc;
+    color: white;
+    cursor: pointer;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.file-browser {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.file-browser-header {
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.file-browser-header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.path {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.file-browser-content {
+    padding: 20px;
+}
+
+.file-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.file-item:hover {
+    background-color: #f1f1f1;
+}
+
+.file-icon {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.file-name {
+    font-size: 16px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.button {
+    display: block;
+    width: 200px;
+    padding: 15px;
+    margin: 10px;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #007bff;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.back {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    text-decoration: none;
+}
+
+.back:hover {
+    background-color: #0056b3;
+}

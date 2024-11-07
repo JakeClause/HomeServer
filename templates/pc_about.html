@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC INFO</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hubstyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+</head>
+<body>
+    <a id="back" href="{{ url_for('hub') }}">Back</a>
+    <h1>PC Info</h1>
+    <form id="settingsUploadForm" action="/save_settings" method="post">
+        <h5 for="HOMEFILETRASFER">Name: </h5>
+        <h5 for="HOMEFILETRASFER">Processor: </h5>
+        <h5 for="HOMEFILETRASFER">Physical Cores: </h5>
+        <h5 for="HOMEFILETRASFER">Total Cores: </h5>
+        <h5 for="HOMEFILETRASFER">Core Frequency: </h5>
+    </form>
+
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

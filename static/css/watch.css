@@ -1,0 +1,62 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: #333;
+}
+#video-container {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 50px); /* Adjust height to accommodate title */
+}
+video {
+    width: 80%;
+    height: auto;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+}
+
+#video-title {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    z-index: 1;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#wvt {
+    position: absolute;
+    top: 20px; /* Adjust top position */
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    z-index: 1;
+}

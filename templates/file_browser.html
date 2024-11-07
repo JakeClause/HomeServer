@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Browser</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/browser.css') }}">
+</head>
+<body>
+    <button id="back">Back</button>
+    <div class="file-browser" id="container">
+        <div class="file-browser-header">
+            <h1>File Browser</h1>
+            <div class="path">
+                <span>{{ current_path.replace('\\', '/') }}</span>
+            </div>
+            {% if current_path != root_path %}
+            <button id="parent-folder" onclick="goToParentFolder()">Go to Parent Folder</button>
+            {% endif %}
+        </div>
+        <div class="file-browser-content">
+            <ul class="file-list">
+                {% for file in file_data %}
+                    {% if file.is_dir %}
+                    <li class="file-item folder" data-path="{{ file.path }}">
+                        <span class="file-icon">📁</span>
+                        <span class="file-name">{{ file.path.split('\\').pop() }}</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                {% for file in file_data %}
+                    {% if not file.is_dir %}
+                    <li class="file-item file">
+                        {% if file.path.lower().endswith('.html') %}
+                            <span class="file-icon">🌐</span>
+                        {% elif file.path.lower().endswith('.py') %}
+                            <span class="file-icon">🐍</span>
+                        {% elif file.path.lower().endswith('.css') %}
+                            <span class="file-icon">🎨</span>
+                        {% elif file.path.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')) %}
+                            <span class="file-icon">🖼️</span>
+                        {% elif file.path.lower().endswith(('.mp4', '.avi', '.mov', '.mkv')) %}
+                            <span class="file-icon">🎥</span>
+                        {% elif file.path.lower().endswith(('.zip', '.7z')) %}
+                            <span class="file-icon">📦</span>
+                        {% elif file.path.lower().endswith(('.mp3', '.wav', '.flac')) %}
+                            <span class="file-icon">🎵</span>
+                        {% elif file.path.lower().endswith('.txt') %}
+                            <span class="file-icon">📝</span>
+                        {% else %}
+                            <span class="file-icon">📄</span>
+                        {% endif %}
+                        <span class="file-name">{{ file.path.split('\\').pop() }}</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('back').addEventListener('click', function() {
+            window.location.href = "{{ url_for('hub') }}";
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM fully loaded and parsed.");
+            const folderItems = document.querySelectorAll('.file-item.folder');
+            console.log("Found folder items: ", folderItems.length);
+            folderItems.forEach(item => {
+                console.log("Adding click event listener to folder item: ", item);
+                item.addEventListener('click', function() {
+                    const path = this.getAttribute('data-path');
+                    console.log("Folder item clicked, path: ", path);
+                    if (path) {
+                        const encodedPath = encodeURIComponent(path);
+                        console.log("Navigating to: ", `/file_browser?path=${encodedPath}`);
+                        window.location.href = `/file_browser?path=${encodedPath}`;
+                    }
+                });
+            });
+        });
+
+        function goToParentFolder() {
+            console.log("Parent folder button clicked.");
+            const currentPath = "{{ current_path.replace('\\', '/') }}";
+            const rootPath = "{{ root_path.replace('\\', '/') }}";
+            console.log("Current path: ", currentPath);
+            console.log("Root path: ", rootPath);
+
+            if (currentPath === rootPath) {
+                console.log("Already at the root path.");
+                return;
+            }
+
+            // Split the current path into segments
+            let segments = currentPath.split('/');
+            // Ensure we do not go beyond the root path
+            if (segments.length > 1) {
+                segments.pop(); // Remove the last segment
+            }
+            // Join the segments back into a path string
+            let parentPath = segments.join('/');
+            if (parentPath.length < rootPath.length) {
+                parentPath = rootPath;
+            }
+            console.log("Parent path: ", parentPath);
+
+            window.location.href = `/file_browser?path=${encodeURIComponent(parentPath)}`;
+        }
+    </script>
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

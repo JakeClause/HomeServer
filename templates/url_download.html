@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Downloader</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hubstyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+</head>
+<body>
+    <a id="back" href="{{ url_for('hub') }}">Back</a>
+    <h1>URL Downloader</h1>
+    <form action="/download_url" method="POST">
+        <label for="url">Enter the URL to download:</label>
+        <input type="text" id="url" name="url" required>
+        <button type="submit">Download</button>
+    </form>
+    <div id="progress" style="display: none;">
+        <progress id="progressBar" value="0" max="100"></progress>
+        <p id="progressStatus">Download in progress...</p>
+    </div>
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

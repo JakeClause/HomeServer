@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDFtoJPG</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hubstyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .emoji-wrapper {
+            width: 400px;
+            height: 80px;
+            margin-bottom: 20px;
+            position: relative;
+            border-radius: 25px;
+            background: #fff;
+        }
+
+        .emoji {
+            font-size: 48px;
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: left 2s ease, transform 2s ease;
+        }
+
+        .cabinet {
+            font-size: 48px;
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .notification {
+            display: none;
+            font-size: 24px;
+            color: #4a90e2;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a id="back" href="{{ url_for('hub') }}">Back</a>
+    <h1>PDFtoJPG</h1>
+    <form id="convertForm" enctype="multipart/form-data">
+        <label for="pdfFile">Select PDF file:</label>
+        <input type="file" name="pdfFile" id="pdfFile" accept=".pdf" required><br>
+        
+        <button type="button" onclick="convert()">Convert</button>
+    </form>
+    
+    <div class="container">
+        <div class="emoji-wrapper">
+            <div class="emoji" id="emoji">📄</div>
+            <div class="cabinet" id="cabinet">🖼️</div>
+        </div>
+        <div class="notification" id="conversionStatus">
+            Conversion complete.
+        </div>
+    </div>
+
+    <script>
+        function convert() {
+            var form = document.getElementById('convertForm');
+            var formData = new FormData(form);
+            
+            var emoji = document.getElementById('emoji');
+            var cabinet = document.getElementById('cabinet');
+            var notification = document.getElementById('conversionStatus');
+            
+            // For simulation, use a fixed duration
+            const estimatedDuration = 50; // Duration in milliseconds (5 seconds)
+
+            // Update CSS transition duration based on estimated duration
+            emoji.style.transitionDuration = `${estimatedDuration}ms`;
+
+            // Animate the emoji
+            emoji.style.left = 'calc(100% - 100px)'; // Adjusted distance
+            emoji.style.transform = 'translateY(-40%) scale(0.2)';
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Show the notification
+                        notification.style.display = 'block';
+
+                        // Hide the notification after 3 seconds
+                        setTimeout(() => {
+                            notification.style.display = 'none'; // Hide notification
+                        }, 3000); // 3000ms = 3 seconds
+                    } else {
+                        // Handle error
+                        console.error('Conversion failed:', xhr.responseText);
+                    }
+                }
+            };
+
+            xhr.open('POST', '/pdf', true);
+            xhr.send(formData);
+
+            // Reset emoji position and style after animation
+            setTimeout(() => {
+                emoji.style.left = '30px'; // Reset emoji position
+                emoji.style.transform = 'translateY(-50%) scale(1)'; // Reset emoji scale
+                emoji.style.transitionDuration = '0s'; // Reset transition
+            }, estimatedDuration + 3000); // 3000ms to match duration
+        }
+    </script>
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

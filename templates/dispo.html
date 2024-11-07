@@ -1,0 +1,31 @@
+<!-- templates/hub.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispensaries</title>
+    <link rel="stylesheet" href="../static/css/hubstyle.css">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+</head>
+<body>
+    <a id="back" href="{{ url_for('hub') }}">Back</a>
+    <div class="container">
+        <div id='nav'>
+            <a href="https://shop.apothecarium.com/bethlehem?utm_source=google&utm_medium=gmb&utm_campaign=bethlehem" target="_blank" class="button">Apothecarium</a>
+            <a href="https://letsascend.com/menu/pa-scranton-menu-med" target="_blank" class="button">Ascend</a>
+            <a href="https://beyond-hello.com/pennsylvania-dispensaries/bethlehem/medical-menu/" target="_blank" class="button">Beyond Hello</a>
+            <a href="https://store.blocdispensary.com/stores/bloc-dispensary-bethlehem" target="_blank" class="button">Bloc</a>
+            <a href="https://cannabistcompany.com/locations/pa-alle-tilghman-3025/medical-menu" target="_blank" class="button">Columbia Care</a>
+            <a href="https://curaleaf.com/shop/pennsylvania/curaleaf-allentown/categories/extracts?sort=price-desc-rank" target="_blank" class="button">Curaleaf</a>
+            <a href="https://allentown.ethoscannabis.com/stores/mission-allentown?utm_medium=organic&utm_source=google-gmb&utm_campaign=allentown&_gl=1*1rp8oqc*_ga*NTAzMjI4OTg1LjE3MDM3MzYyMDc.*_ga_LJ036PP29V*MTcwMzczNjIwNy4xLjAuMTcwMzczNjIwNy42MC4wLjA." target="_blank" class="button">Ethos</a>
+            <a href="https://risecannabis.com/dispensary-menu/pennsylvania/warminster-medical-menu/" target="_blank" class="button">Rise</a>
+            <a href="https://www.sunnyside.shop/products/flower" target="_blank" class="button">Sunnyside</a>
+            <a href="https://www.trulieve.com/dispensaries/whitehall-pa#shop-now" target="_blank" class="button">Trulieve</a>
+            <a href="https://www.verilife.com/pa/menu/quakertown" target="_blank" class="button">Verilife</a>
+            <a href="https://www.vytaloptions.com/fogelsville/" target="_blank" class="button">Vytal Options</a>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>
